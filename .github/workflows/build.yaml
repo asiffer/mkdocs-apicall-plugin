@@ -1,9 +1,11 @@
-name: CI
+name: Build
 
 on:
   push:
     branches:
       - master
+  pull_request:
+
 env:
   PYTHON_VERSION: "3.10"
   POETRY_VERSION: "1.1.13"
@@ -28,11 +30,3 @@ jobs:
           name: mkdocs_apicall_plugin
           path: |
             dist/**
-  publish:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Build and publish to PyPI
-        uses: JRubics/poetry-publish@v1.12
-        with:
-          pypi_token: ${{ secrets.PYPI_TOKEN }}

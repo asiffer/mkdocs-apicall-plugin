@@ -1,0 +1,29 @@
+name: Publish
+
+on:
+  push:
+    branches:
+      - master
+env:
+  PYTHON_VERSION: "3.10"
+  POETRY_VERSION: "1.1.13"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install poetry
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: ${{ env.POETRY_VERSION }}
+      - name: Check package versions
+        run: |
+          echo "PYPI_VERSION=$(poetry search mkdocs-apicall-plugin|grep '^mkdocs-apicall-plugin'|grep -o '[0-9]\+[.][0-9]\+[.][0-9]\+')" >> $GITHUB_ENV;
+          echo "CURRENT_VERSION=$(poetry version -s)" >> $GITHUB_ENV;
+      - name: Publish
+        if: ${{ env.CURRENT_VERSION != env.PYPI_VERSION }}
+        run: poetry publish -u __token__ -p "${{ secrets.PYPI_TOKEN }}"
