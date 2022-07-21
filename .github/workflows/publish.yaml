@@ -26,4 +26,4 @@ jobs:
           echo "CURRENT_VERSION=$(poetry version -s)" >> $GITHUB_ENV;
       - name: Publish
         if: ${{ env.CURRENT_VERSION != env.PYPI_VERSION }}
-        run: poetry publish -u __token__ -p "${{ secrets.PYPI_TOKEN }}"
+        run: poetry build && poetry publish -u __token__ -p "${{ secrets.PYPI_TOKEN }}"
