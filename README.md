@@ -1,6 +1,28 @@
 # mkdocs-apicall-plugin
 
-Automatically insert code snippets to perform API calls in various ways
+[![CI](https://github.com/asiffer/mkdocs-apicall-plugin/actions/workflows/ci.yaml/badge.svg)](https://github.com/asiffer/mkdocs-apicall-plugin/actions/workflows/ci.yaml)
+
+Automatically insert code snippets to run API calls
+
+```md
+## Simple call 
+
+@@@ GET /object/list
+
+
+## Single header
+
+@@@ GET /object/list
+    Accept: application/json
+
+
+## Full call
+
+@@@ POST /data/blob {"a": "b"}
+    Accept: application/json
+    Content-Type: application/json
+    Authorization: Bearer 4P1k3y
+```
 
 ![](assets/example.gif)
 
@@ -25,27 +47,6 @@ plugins:
   - apicall
 ```
 
-## Quick start
-
-```ini
-## Simple call 
-
-@@@ GET /object/list
-
-
-## Single header
-
-@@@ GET /object/list
-    Accept: application/json
-
-
-## Full call
-
-@@@ POST /data/blob {"a": "b"}
-    Accept: application/json
-    Content-Type: application/json
-    Authorization: Bearer 4P1k3y
-```
 
 ## Syntax
 
@@ -95,3 +96,5 @@ plugins:
 ```
 
 ## Contributing
+
+Obviously, we need to dev more *languages* !
