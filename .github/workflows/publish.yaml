@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - master
+    paths:
+      - "**.py"
+      - ".github/workflows/publish.yaml"
+
 env:
   PYTHON_VERSION: "3.10"
   POETRY_VERSION: "1.1.13"

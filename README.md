@@ -1,6 +1,8 @@
 # mkdocs-apicall-plugin
 
-[![CI](https://github.com/asiffer/mkdocs-apicall-plugin/actions/workflows/ci.yaml/badge.svg)](https://github.com/asiffer/mkdocs-apicall-plugin/actions/workflows/ci.yaml)
+[![Build](https://github.com/asiffer/mkdocs-apicall-plugin/actions/workflows/build.yaml/badge.svg)](https://github.com/asiffer/mkdocs-apicall-plugin/actions/workflows/build.yaml)
+[![Publish](https://github.com/asiffer/mkdocs-apicall-plugin/actions/workflows/publish.yaml/badge.svg)](https://github.com/asiffer/mkdocs-apicall-plugin/actions/workflows/publish.yaml)
+[![PyPI version](https://badge.fury.io/py/mkdocs-apicall-plugin.svg)](https://badge.fury.io/py/mkdocs-apicall-plugin)
 
 Automatically insert code snippets to run API calls
 
