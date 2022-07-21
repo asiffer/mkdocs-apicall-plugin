@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mkdocs-apicall-plugin"
-version = "0.1.0"
+version = "0.1.1"
 description = "Automatically insert code snippets to run API calls"
 authors = ["Alban Siffer <alban@situation.sh>"]
 license = "Apache-2.0"
