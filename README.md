@@ -4,7 +4,7 @@
 [![Publish](https://github.com/asiffer/mkdocs-apicall-plugin/actions/workflows/publish.yaml/badge.svg)](https://github.com/asiffer/mkdocs-apicall-plugin/actions/workflows/publish.yaml)
 [![PyPI version](https://badge.fury.io/py/mkdocs-apicall-plugin.svg)](https://badge.fury.io/py/mkdocs-apicall-plugin)
 
-Automatically insert code snippets to run API calls
+Auto-generate code samples to make API calls
 
 ![](assets/example3.gif)
 
