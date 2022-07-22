@@ -6,7 +6,7 @@
 
 Automatically insert code snippets to run API calls
 
-![](assets/example2.gif)
+![](assets/example3.gif)
 
 ## Installation
 
@@ -34,7 +34,7 @@ plugins:
 
 The syntax is given below. Basically it may look like a classical HTTP request message.
 
-```ini
+```md
 @@@ <METHOD> <PATH> [<PAYLOAD>]
     [<HEADER-KEY>: <HEADER-VALUE>]
     [<HEADER-KEY>: <HEADER-VALUE>]
