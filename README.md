@@ -6,27 +6,7 @@
 
 Automatically insert code snippets to run API calls
 
-```md
-## Simple call 
-
-@@@ GET /object/list
-
-
-## Single header
-
-@@@ GET /object/list
-    Accept: application/json
-
-
-## Full call
-
-@@@ POST /data/blob {"a": "b"}
-    Accept: application/json
-    Content-Type: application/json
-    Authorization: Bearer 4P1k3y
-```
-
-![](assets/example.gif)
+![](assets/example2.gif)
 
 ## Installation
 
@@ -96,6 +76,23 @@ plugins:
         - python
         - javascript
 ```
+
+You can also pass extra configuration to a language by adding some sub-keys:
+
+```yaml
+plugins:
+  - apicall:
+      line_length: 90
+      icons: true
+      languages:
+        - curl:
+            options:
+              - "-s"
+        - python
+        - javascript
+```
+
+Currently only `curl` supports the `options` sub-key to insert some CLI options.
 
 ## Contributing
 

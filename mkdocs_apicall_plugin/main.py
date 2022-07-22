@@ -124,18 +124,35 @@ class APICallPlugin(BasePlugin):
         self, markdown: str, page: Page, config: dict, files: list
     ) -> str:
 
+        is_inside_code_block = False
         lines = []
         md_lines = markdown.splitlines()
         nb_lines = len(md_lines)
         i = 0
         while i < nb_lines:
             line = md_lines[i]
+
+            # check code block ===============================================
+            if line.startswith("```"):
+                if len(line) <= 3:
+                    # end of block
+                    is_inside_code_block = False
+                else:
+                    is_inside_code_block = True
+            # ================================================================
+
+            # ignore some lines ==============================================
             # do not treat lines that do not start with tag
-            if not any(line.startswith(tag) for tag in self.tags):
+            # and lines that are in code block
+            if (not any(line.startswith(tag) for tag in self.tags)) or (
+                is_inside_code_block
+            ):
                 lines.append(line)
                 i += 1
                 continue
+            # ================================================================
 
+            # Parse block ====================================================
             # here it means that we have reach a tag
             # so we must parse the block
             block = [line]
@@ -148,5 +165,6 @@ class APICallPlugin(BasePlugin):
                 lines.append(b)
 
             block.clear()
+            # ================================================================
 
         return "\n".join(lines)
