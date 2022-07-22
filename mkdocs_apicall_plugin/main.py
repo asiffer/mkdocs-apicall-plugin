@@ -46,7 +46,10 @@ class APICallPlugin(BasePlugin):
     config_scheme = (
         (
             "languages",
-            config_options.Type(list, default=["curl", "python"]),
+            config_options.Type(
+                list,
+                default=[{"curl": {}}, {"python": {}}, {"javascript": {}}],
+            ),
         ),
         (
             "line_length",
@@ -96,12 +99,25 @@ class APICallPlugin(BasePlugin):
             ]
         )
 
+    def get_languages(self) -> List[str]:
+        """Return the list of the languages given in the options"""
+        langs: List[str] = []
+        for lang in self.config["languages"]:
+            # in case of options
+            if isinstance(lang, dict):
+                k: str = next(iter(lang.keys()))
+                langs.append(k)
+            # no options
+            elif isinstance(lang, str):
+                langs.append(lang)
+        return langs
+
     def get_calls(self) -> List[Type[APICall]]:
-        """Return the languages as desired by the config (in the same order)"""
+        """Return the languages APICall as desired by the config (in the same order)"""
         registered = [c.name for c in APICall.__subclasses__()]
         return [
             APICall.__subclasses__()[registered.index(name)]
-            for name in self.config["languages"]
+            for name in self.get_languages()
         ]
 
     def on_page_markdown(
