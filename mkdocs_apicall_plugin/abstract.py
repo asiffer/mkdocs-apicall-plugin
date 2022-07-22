@@ -54,8 +54,23 @@ class APICall(ABC):
         self._headers = headers
         self._body = body
 
+        # general config
         self._max_line_length = plugin_config.get("line_length", 90)
         self._print_icon = plugin_config.get("icons", False)
+        # language specific config
+        self._language_config = self.extract_config(plugin_config)
+
+    def extract_config(self, plugin_config: dict) -> dict:
+        for lang in plugin_config["languages"]:
+            if isinstance(lang, dict):
+                k: str = next(iter(lang.keys()))
+                if k == self.name:
+                    return lang[k]
+            elif lang == self.name:
+                # it means this is not necessary to
+                # keep on
+                break
+        return {}
 
     def render_code(self) -> str:
         raise NotImplementedError("It must be implemented")

@@ -46,7 +46,10 @@ class APICallPlugin(BasePlugin):
     config_scheme = (
         (
             "languages",
-            config_options.Type(list, default=["curl", "python"]),
+            config_options.Type(
+                list,
+                default=[{"curl": {}}, {"python": {}}, {"javascript": {}}],
+            ),
         ),
         (
             "line_length",
@@ -96,30 +99,60 @@ class APICallPlugin(BasePlugin):
             ]
         )
 
+    def get_languages(self) -> List[str]:
+        """Return the list of the languages given in the options"""
+        langs: List[str] = []
+        for lang in self.config["languages"]:
+            # in case of options
+            if isinstance(lang, dict):
+                k: str = next(iter(lang.keys()))
+                langs.append(k)
+            # no options
+            elif isinstance(lang, str):
+                langs.append(lang)
+        return langs
+
     def get_calls(self) -> List[Type[APICall]]:
-        """Return the languages as desired by the config (in the same order)"""
+        """Return the languages APICall as desired by the config (in the same order)"""
         registered = [c.name for c in APICall.__subclasses__()]
         return [
             APICall.__subclasses__()[registered.index(name)]
-            for name in self.config["languages"]
+            for name in self.get_languages()
         ]
 
     def on_page_markdown(
         self, markdown: str, page: Page, config: dict, files: list
     ) -> str:
 
+        is_inside_code_block = False
         lines = []
         md_lines = markdown.splitlines()
         nb_lines = len(md_lines)
         i = 0
         while i < nb_lines:
             line = md_lines[i]
+
+            # check code block ===============================================
+            if line.startswith("```"):
+                if len(line) <= 3:
+                    # end of block
+                    is_inside_code_block = False
+                else:
+                    is_inside_code_block = True
+            # ================================================================
+
+            # ignore some lines ==============================================
             # do not treat lines that do not start with tag
-            if not any(line.startswith(tag) for tag in self.tags):
+            # and lines that are in code block
+            if (not any(line.startswith(tag) for tag in self.tags)) or (
+                is_inside_code_block
+            ):
                 lines.append(line)
                 i += 1
                 continue
+            # ================================================================
 
+            # Parse block ====================================================
             # here it means that we have reach a tag
             # so we must parse the block
             block = [line]
@@ -132,5 +165,6 @@ class APICallPlugin(BasePlugin):
                 lines.append(b)
 
             block.clear()
+            # ================================================================
 
         return "\n".join(lines)
