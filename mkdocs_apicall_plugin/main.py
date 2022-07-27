@@ -20,7 +20,7 @@ def import_languages():
         if file in protected:
             continue
         # import the language
-        importlib.import_module("mkdocs_apicall_plugin." + file.rstrip(".py"))
+        importlib.import_module(f"mkdocs_apicall_plugin.{file.rstrip('.py')}")
 
 
 class APICallPlugin(BasePlugin):
@@ -74,6 +74,7 @@ class APICallPlugin(BasePlugin):
         request = request.strip()
 
         try:
+            # parse the first line
             method, url, body = request.split(" ", maxsplit=2)
         except ValueError:
             # it means there is no body
@@ -83,8 +84,11 @@ class APICallPlugin(BasePlugin):
         # parse header
         headers = {}
         for b in block:
-            k, v = b.split(":", maxsplit=1)
-            headers[k.strip()] = v.strip()
+            # here we may have empty lines if the markdown
+            # is not well formatted
+            if ":" in b:
+                k, v = b.split(":", maxsplit=1)
+                headers[k.strip()] = v.strip()
 
         return "\n\n".join(
             [
@@ -113,7 +117,8 @@ class APICallPlugin(BasePlugin):
         return langs
 
     def get_calls(self) -> List[Type[APICall]]:
-        """Return the languages APICall as desired by the config (in the same order)"""
+        """Return the languages APICall as desired
+        by the config (in the same order)"""
         registered = [c.name for c in APICall.__subclasses__()]
         return [
             APICall.__subclasses__()[registered.index(name)]
