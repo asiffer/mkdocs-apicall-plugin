@@ -61,7 +61,7 @@ class APICall(ABC):
         self._language_config = self.extract_config(plugin_config)
 
     def extract_config(self, plugin_config: dict) -> dict:
-        for lang in plugin_config["languages"]:
+        for lang in plugin_config.get("languages", []):
             if isinstance(lang, dict):
                 k: str = next(iter(lang.keys()))
                 if k == self.name:

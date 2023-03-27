@@ -17,20 +17,6 @@ class JavascriptAPICall(APICall):
         if len(self._body) > 0:
             fetch_init["body"] = f"JSON.stringify({self._body})"
 
-        # headers = [f"'{k}': '{v}'" for k, v in self._headers.items()]
-        # data = [{self._body}] if len(self._body) > 0 else []
-
-        # out = f"fetch('{self._url}'"
-        # options = [f"method: {self._method}"]
-        # if len(headers) > 0:
-        #     options += [f"headers: {{{', '.join(headers)}}}"]
-        # if len(data) > 0:
-        #     options += [f"body: {data[0]}"]
-
-        # test_out = out + ", {" + ", ".join(options) + "});"
-        # if len(test_out) < self._max_line_length:
-        #     return test_out
-
         out = (
             f"fetch('{self._url}', "
             + json.dumps(fetch_init, indent=None)
@@ -51,37 +37,3 @@ class JavascriptAPICall(APICall):
             + ");"
         )
         return out
-        # multiline 1
-        # out = [f"fetch('{self._url}', {{"]
-        # options = [f"{self.indent}{o},\n" for o in options]
-        # out += options + ["});"]
-
-        # for o in options:
-        #     if le
-
-        # # blob = f"method: '{self._method}'"
-        # if len(self._headers) > 0:
-        #     blob = f"\n{self.indent}{blob}"
-        #     blob += f",\n{self.indent}headers: {{\n"
-        #     blob += (
-        #         ",\n".join(
-        #             f"{self.indent * 2}'{key}': '{value}'"
-        #             for key, value in self._headers.items()
-        #         )
-        #         + f"\n{self.indent}}}"
-        #     )
-
-        # if len(self._body) > 0:
-        #     blob += f",\n{self.indent}body: JSON.stringify({self._body})"
-
-        # return f"""fetch('{self._url}', {{ {blob} }});"""
-
-
-"""
-method: '{method}',{headers}
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({a: 1, b: 'Textual content'})
-"""
