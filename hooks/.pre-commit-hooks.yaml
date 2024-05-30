@@ -1,0 +1,7 @@
+- id: inject-version
+  name: Inject version in package
+  description: Retrieve the version from pyproject.toml and set __version__ variable at top level of the package
+  entry: inject-version.sh
+  language: system
+  stages: [pre-commit, pre-merge-commit, manual]
+  pass_filenames: false
