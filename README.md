@@ -148,6 +148,9 @@ You have access to several attributes:
 | `_print_icon`      | `bool`                | Whether the icon will be printed (normally it does have impact on your dev)           |
 | `_language_config` | `dict`                | Language specific configuration                                                       |
 
-:warning: You are responsible of the possible default values of the`_language_config` attribute.
+> [!WARNING]  
+> You are responsible of the possible default values of the`_language_config` attribute.
 
-:warning: You are encouraged to render code differently according to the value of `_max_line_length`. One may imagine at least an *inline* and a *multiline* rendering.
+> [!WARNING]  
+> You are encouraged to render code differently according to the value of `_max_line_length`. One may imagine at least an *inline* and a *multiline* rendering.
+
