@@ -1,6 +1,6 @@
 [project]
 name = "mkdocs-apicall-plugin"
-version = "0.2.2"
+version = "0.3.0"
 description = "Auto-generate code samples to make API calls"
 authors = [
     { name = "Alban Siffer", email = "31479857+asiffer@users.noreply.github.com" },
