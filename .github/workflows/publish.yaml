@@ -1,36 +1,50 @@
-name: Publish
-
 on:
-  push:
-    branches:
-      - master
-    paths:
-      - "**.py"
-      - ".github/workflows/publish.yaml"
   workflow_dispatch:
+  push:
+    tags:
+      - "*"
 
-env:
-  PYTHON_VERSION: "3.11"
-  POETRY_VERSION: "1.4.2"
+name: Publish mkdocs-apicall-plugin to PyPI
 
 jobs:
-  publish:
+  build:
+    name: Build package
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
         with:
-          python-version: ${{ env.PYTHON_VERSION }}
-      - name: Install poetry
-        uses: abatilo/actions-poetry@v2
+          persist-credentials: false
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+      - name: "Set up Python"
+        uses: actions/setup-python@v5
         with:
-          poetry-version: ${{ env.POETRY_VERSION }}
-      - name: Check package versions
-        run: |
-          echo "PYPI_VERSION=$(poetry search mkdocs-apicall-plugin|grep '^mkdocs-apicall-plugin'|grep -o '[0-9]\+[.][0-9]\+[.][0-9]\+')" >> $GITHUB_ENV;
-          echo "CURRENT_VERSION=$(poetry version -s)" >> $GITHUB_ENV;
-      - name: Publish
-        if: ${{ env.CURRENT_VERSION != env.PYPI_VERSION }}
-        run: |
-          echo "${{ env.CURRENT_VERSION }} != ${{ env.PYPI_VERSION }}";
-          poetry build && poetry publish -u __token__ -p "${{ secrets.PYPI_TOKEN }}";
+          python-version-file: "pyproject.toml"
+      - name: Build a binary wheel and a source tarball
+        run: uv build
+      - name: Store the distribution packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: mkdocs-apicall-plugin
+          path: dist/
+
+  publish:
+    name: Publish to PyPI
+    needs:
+      - build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/mkdocs-apicall-plugin # Replace <package-name> with your PyPI project name
+    permissions:
+      id-token: write # IMPORTANT: mandatory for trusted publishing
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: mkdocs-apicall-plugin
+          path: dist/
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
